@@ -1,0 +1,167 @@
+C:\Users\akademie>mysqldump -u root -proot person_adresse > C:\Users\Akademie\Desktop\person_adresse_Dabour.sql
+
+
+
+select * from mieter
+     join bank on mieter.bank_id = bank.id;
+oder andere Schreibweise:	 
+ select * from mieter, bank where mieter.bank_id=bank.id;
+
+select * from mieter left join bank on mieter.bank_id = bank.id;
+
+select * from mieter right join bank on mieter.bank_id = bank.id;
+
+select * from vertrag
+     join wohnung on vertrag.wohnung_id = wohnung.id
+     join mieter on vertrag.mieter_id = mieter.id;
+
+select mieter.vorname, mieter.name, wohnung.whg_nummer,wohnung.qm,
+	vertrag.datum_einzug from vertrag
+     join wohnung on vertrag.wohnung_id = wohnung.id
+     join mieter on vertrag.mieter_id = mieter.id;
+
+
+
+select * from kinder left join kunde on kinder.kunde_id = kunde.id;
+
+select * from kunde left join kinder on kinder.kunde_id = kunde.id;
+
+UPDATE kinder SET kind = '<keine>' WHERE ID = 13;
+
+select rechnung.name, rechnung.voname, rechnung.rNr, rechnung.betrag, adresse.ort
+from rechnung 
+join kunde on rechnung.kunde_id = kunde.id
+join adresse on kunde.adresse_id = adresse.id;
+
+
+select * from kunde left join rechnung on rechnung.kunde_id = kunde.id;
+
+select * from kunde right join rechnung on rechnung.kunde_id = kunde.id;
+
+select sum(betrag) from rechnung where betrag < 100.00;
+
+select (betrag) from rechnung where betrag < 100.00;		// oder 100
+
+select avg(betrag) from rechnung;
+
+
+
+select * from veranstaltung
+    join rechnung on rechnung.veranstaltung_id=veranstaltung.id
+    where veranstaltung.id=1;
+	
+
+
+select kunde.*, rechnung.* from kunde left join rechnung on rechnung.kunde_id = kunde.id WHERE rechnung.kunde_id IS NULL;
++----+------------+---------------+------------+------+------+--------+--------+------+----------+------------------+
+| id | kundenname | kundenvorname | adresse_id | id   | name | voname | betrag | rNr  | kunde_id | veranstaltung_id |
++----+------------+---------------+------------+------+------+--------+--------+------+----------+------------------+
+|  4 | Bolte      | Bertram       |          3 | NULL | NULL | NULL   |   NULL | NULL |     NULL |             NULL |
++----+------------+---------------+------------+------+------+--------+--------+------+----------+------------------+
+	
+	
+	
+select * from rechnung 
+    join veranstaltung on rechnung.veranstaltung_id = veranstaltung.id;
+	
+	
+	 
+SELECT * from kunde 
+join rechnung on rechnung.kunde_id = kunde.id;
+
+	 
+SELECT rechnung.rNr, rechnung.betrag, veranstaltung.veranstaltungsname, kunde.kundenvorname,
+kunde.kundenname, adresse.strasse, adresse.hausnummer, adresse.plz, adresse.ort 
+FROM rechnung 
+JOIN veranstaltung ON rechnung.veranstaltung_id = veranstaltung.id  
+JOIN kunde ON  rechnung.kunde_id = kunde.id   
+JOIN adresse ON kunde.adresse_id = adresse.id;	 
++-----+--------+--------------------+---------------+------------+--------------+------------+-------+-----------+
+| rNr | betrag | veranstaltungsname | kundenvorname | kundenname | strasse      | hausnummer | plz   | ort       |
++-----+--------+--------------------+---------------+------------+--------------+------------+-------+-----------+
+| 21  |  98.00 | Mephisto           | Hans          | Muster     | Musterweg    | 12         | 22222 | Karlstadt |
+| 43  | 214.99 | Tristan und Isolde | Hans          | Muster     | Musterweg    | 12         | 22222 | Karlstadt |
+| 123 |  98.00 | Mephisto           | Hans          | Muster     | Musterweg    | 12         | 22222 | Karlstadt |
+| 33  | 120.00 | Tristan und Isolde | Frieda        | Wiegerich  | Wanderstraße | 98         | 33333 | Rettrich  |
++-----+--------+--------------------+---------------+------------+--------------+------------+-------+-----------+	 
+
+
+SELECT rechnung.rNr, rechnung.betrag, veranstaltung.veranstaltungsname, kunde.kundenvorname,
+     kunde.kundenname, adresse.strasse, adresse.hausnummer, adresse.plz, adresse.ort
+     FROM rechnung
+     JOIN veranstaltung ON rechnung.veranstaltung_id = veranstaltung.id
+     JOIN kunde ON  rechnung.kunde_id = kunde.id
+     JOIN adresse ON kunde.adresse_id = adresse.id
+     where betrag < 100;
++-----+--------+--------------------+---------------+------------+-----------+------------+-------+-----------+
+| rNr | betrag | veranstaltungsname | kundenvorname | kundenname | strasse   | hausnummer | plz   | ort       |
++-----+--------+--------------------+---------------+------------+-----------+------------+-------+-----------+
+| 21  |  98.00 | Mephisto           | Hans          | Muster     | Musterweg | 12         | 22222 | Karlstadt |
+| 123 |  98.00 | Mephisto           | Hans          | Muster     | Musterweg | 12         | 22222 | Karlstadt |
++-----+--------+--------------------+---------------+------------+-----------+------------+-------+-----------+
+
+
+SELECT COUNT(rechnung.id) from rechnung;
++--------------------+
+| COUNT(rechnung.id) |
++--------------------+
+|                  4 |
++--------------------+
+
+mysql> select * from kunde where kundenname like '%te';
++----+------------+---------------+------------+
+| id | kundenname | kundenvorname | adresse_id |
++----+------------+---------------+------------+
+|  4 | Bolte      | Bertram       |          3 |
++----+------------+---------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from kunde where kundenname like '_uster';
++----+------------+---------------+------------+
+| id | kundenname | kundenvorname | adresse_id |
++----+------------+---------------+------------+
+|  2 | Muster     | Hans          |          1 |
++----+------------+---------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from kunde where kundenname like '%ol%';
++----+------------+---------------+------------+
+| id | kundenname | kundenvorname | adresse_id |
++----+------------+---------------+------------+
+|  4 | Bolte      | Bertram       |          3 |
++----+------------+---------------+------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
